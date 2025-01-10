@@ -1,0 +1,128 @@
+basePath: /
+definitions:
+  main.Address:
+    description: Address information
+    properties:
+      city:
+        description: City name
+        type: string
+      house:
+        description: House number
+        type: string
+      lat:
+        description: Latitude
+        type: string
+      lon:
+        description: Longitude
+        type: string
+      street:
+        description: Street name
+        type: string
+      value:
+        description: Full address value
+        type: string
+    type: object
+  main.RequestAddressGeocode:
+    description: Request body for address geocode
+    properties:
+      lat:
+        description: |-
+          Latitude
+          Required: true
+        type: string
+      lng:
+        description: |-
+          Longitude
+          Required: true
+        type: string
+    type: object
+  main.RequestAddressSearch:
+    description: Request body for address search
+    properties:
+      query:
+        description: |-
+          Query string for address search
+          Required: true
+        type: string
+    type: object
+  main.ResponseAddress:
+    description: Response for address search and geocode
+    properties:
+      addresses:
+        items:
+          $ref: '#/definitions/main.Address'
+        type: array
+    type: object
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+  description: This is a sample geo service API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Geo Service API
+  version: "1.0"
+paths:
+  /api/address/geocode:
+    post:
+      consumes:
+      - application/json
+      description: Geocode address by latitude and longitude
+      parameters:
+      - description: Geocode address request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/main.RequestAddressGeocode'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.ResponseAddress'
+        "400":
+          description: Invalid request body
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Geocode address by coordinates
+      tags:
+      - address
+  /api/address/search:
+    post:
+      consumes:
+      - application/json
+      description: Search for addresses matching the given query
+      parameters:
+      - description: Search address request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/main.RequestAddressSearch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.ResponseAddress'
+        "400":
+          description: Invalid request body
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Search address by query
+      tags:
+      - address
+swagger: "2.0"
