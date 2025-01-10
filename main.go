@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	//_ "geo-swagger-service/docs"
+	_ "github.com/Kukushechka/docs"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	_ "github.com/swaggo/http-swagger"
+	httpSwagger "github.com/swaggo/http-swagger"
 	"log"
 	"net/http"
 )
@@ -29,6 +30,9 @@ func main() {
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
+	r.Get("/swagger/*", httpSwagger.Handler(
+		httpSwagger.URL("/swagger/doc.json"),
+	))
 
 	r.Post("/api/address/search", hanler.SearchAddress)
 	r.Post("/api/address/geocode", hanler.GeocodeAddress)
