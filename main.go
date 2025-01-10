@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	_ "github.com/Kukushechka/docs"
+	_ "github.com/Kukushechka/first-project/docs"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	_ "github.com/swaggo/http-swagger"
