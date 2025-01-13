@@ -117,7 +117,7 @@ func (h *Handler) RegisterUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user.Password = string(hashedPassword) //123
+	user.Password = string(hashedPassword)
 	Users[user.Username] = user
 
 	w.WriteHeader(http.StatusOK)

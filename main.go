@@ -1,7 +1,12 @@
 package main
 
 import (
-	"fmt"
+	"context"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
 	_ "github.com/Kukushechka/first-project/docs"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -59,6 +64,34 @@ func main() {
 		r.Post("/api/address/geocode", hanler.GeocodeAddress)
 	})
 
-	fmt.Println("Слушаюсь")
-	log.Fatal(http.ListenAndServe(":8080", r))
+	server := &http.Server{
+		Addr:         ":8080",
+		Handler:      r,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM) //принудительное закрыте сервера контрол + с
+
+	go func() {
+		log.Println("Listen")
+		if err := server.ListenAndServe(); err != nil {
+			log.Fatalf("Err: %v", err)
+		}
+	}()
+
+	<-quit
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if err := server.Shutdown(ctx); err != nil {
+		log.Fatalf("Server shutdown")
+	}
+
+	//fmt.Println("Слушаюсь")
+	//log.Fatal(http.ListenAndServe(":8080", r))
+
+	log.Println("End server")
 }

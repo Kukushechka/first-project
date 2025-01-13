@@ -12,7 +12,6 @@ import (
 	"strings"
 )
 
-// 123
 type GeoService struct {
 	api       *suggest.Api
 	apiKey    string
